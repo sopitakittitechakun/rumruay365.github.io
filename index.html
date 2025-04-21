@@ -4,11 +4,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>สุ่มเปิดไพ่ลุ้นรางวัล</title>
+  <title>เปิดไพ่ลุ้นเลข</title>
   <style>
     body {
       font-family: 'Prompt', sans-serif;
-      background: #fffaf3;
+      background: #fff8f0;
       text-align: center;
       padding: 30px;
     }
@@ -38,60 +38,58 @@
 </head>
 <body>
   <h2>🃏 กรอกเบอร์เพื่อเปิดไพ่ 1 ใบ</h2>
-
   <input type="text" id="phone" placeholder="กรอกเบอร์โทรศัพท์" maxlength="10" />
-  <br/>
+  <br />
   <button onclick="startGame()">เริ่มเกม</button>
 
   <div id="cards" style="margin-top: 20px;"></div>
 
-  <p id="resultText"></p>
-
   <script>
-    const scriptURL = 'https://script.google.com/macros/s/PASTE_YOUR_SCRIPT_URL_HERE/exec';
-    let phoneValidated = false;
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwdtb6sSO36JiJXxQcOKNkjPlBM41JjOeVGppLPgAgkAy-Cv_L4FNx2e25266rDPVSXLQ/exec';
     let hasFlipped = false;
+    let playedNumbers = []; // จำเบอร์ที่เคยเล่นไว้
 
     function startGame() {
       const phone = document.getElementById("phone").value;
-      if (!phone || phone.length !== 10 || !/^0[0-9]{9}$/.test(phone)) {
+      if (!/^0[0-9]{9}$/.test(phone)) {
         alert("กรุณาใส่เบอร์โทรให้ถูกต้อง");
         return;
       }
-      phoneValidated = true;
+      if (playedNumbers.includes(phone)) {
+        alert("เบอร์นี้เล่นไปแล้ว");
+        return;
+      }
+
       hasFlipped = false;
       document.getElementById("cards").innerHTML = "";
 
       const numbers = shuffleArray([1,2,3,4,5,6,7,8,9,10]);
-      numbers.forEach((num, index) => {
+      numbers.forEach(num => {
         const card = document.createElement("div");
         card.className = "card";
         card.textContent = "?";
-        card.onclick = function() {
-          flipCard(card, num);
-        };
+        card.onclick = () => flipCard(card, num, phone);
         document.getElementById("cards").appendChild(card);
       });
-
-      document.getElementById("resultText").textContent = "";
     }
 
-    function flipCard(el, number) {
-      if (!phoneValidated || hasFlipped) return;
+    function flipCard(el, number, phone) {
+      if (hasFlipped) return;
 
       el.textContent = number;
       el.classList.add("opened");
       hasFlipped = true;
+      playedNumbers.push(phone);
 
-      const phone = document.getElementById("phone").value;
-      document.getElementById("resultText").textContent = `เบอร์ ${phone} ได้เลข ${number}`;
+      alert(`🎉 เบอร์ ${phone} ได้เลข ${number} 🎉`);
 
-      // ส่งเข้า Google Sheet
       fetch(scriptURL, {
         method: 'POST',
         mode: 'no-cors',
         body: JSON.stringify({ phone: phone, reward: number }),
-        headers: { 'Content-Type': 'application/json' }
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
     }
 
