@@ -6,6 +6,69 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>เปิดไพ่ลุ้นเลข</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600&display=swap');
+
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background: linear-gradient(145deg, #fdfcfb, #e2d1c3);
+      color: #2f2f2f;
+      padding: 40px;
+    }
+
+    h2 {
+      font-weight: 600;
+      font-size: 26px;
+      color: #5a3825;
+    }
+
+    input {
+      padding: 12px;
+      width: 250px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    button {
+      padding: 12px 24px;
+      background: #c49a6c;
+      border: none;
+      color: white;
+      border-radius: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 16px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #b18353;
+    }
+
+    .card {
+      background: #f3f0eb;
+      border: 1px solid #d4c2b0;
+      color: #5a3825;
+      width: 100px;
+      height: 140px;
+      border-radius: 14px;
+      margin: 10px;
+      display: inline-block;
+      line-height: 140px;
+      font-size: 48px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .card.opened {
+      background: #d8af7e;
+      color: white;
+      font-weight: bold;
+    }
+
     body {
       font-family: 'Prompt', sans-serif;
       background: #fff8f0;
@@ -34,7 +97,34 @@
       font-size: 16px;
       margin-top: 10px;
     }
-  </style>
+  
+    .card {
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
+    }
+
+    .card.opened {
+      transform: rotateY(180deg);
+      background: #d8af7e;
+      color: white;
+    }
+
+    .card::after {
+      content: "";
+      background: url('https://cdn.pixabay.com/photo/2017/01/31/13/14/sparkle-2024638_1280.png');
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-size: cover;
+      opacity: 0.15;
+      border-radius: 14px;
+    }
+
+    audio {
+      display: none;
+    }
+</style>
+
 </head>
 <body>
   <h2>🃏 กรอกเบอร์เพื่อเปิดไพ่ 1 ใบ</h2>
@@ -45,7 +135,7 @@
   <div id="cards" style="margin-top: 20px;"></div>
 
   <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwdtb6sSO36JiJXxQcOKNkjPlBM41JjOeVGppLPgAgkAy-Cv_L4FNx2e25266rDPVSXLQ/exec';
+    const scriptURL = 'https://script.google.com/macros/s/PASTE_YOUR_SCRIPT_URL_HERE/exec';
     let hasFlipped = false;
     let playedNumbers = []; // จำเบอร์ที่เคยเล่นไว้
 
@@ -76,6 +166,7 @@
     function flipCard(el, number, phone) {
       if (hasFlipped) return;
 
+      document.getElementById('flipSound').play();
       el.textContent = number;
       el.classList.add("opened");
       hasFlipped = true;
@@ -101,5 +192,8 @@
       return array;
     }
   </script>
+
+<audio id="flipSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_72b2a6d7f8.mp3?filename=correct-choice-43861.mp3" preload="auto"></audio>
 </body>
+
 </html>
