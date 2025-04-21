@@ -4,23 +4,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>เปิดไพ่ลุ้นเลข</title>
+  <title>สุ่มเปิดไพ่ลุ้นรางวัล</title>
   <style>
     body {
       font-family: 'Prompt', sans-serif;
-      background: #fffdf5;
+      background: #fffaf3;
       text-align: center;
-      padding: 40px;
+      padding: 30px;
     }
     .card {
       display: inline-block;
-      width: 120px;
-      height: 160px;
-      margin: 20px;
+      width: 100px;
+      height: 140px;
+      margin: 10px;
       font-size: 48px;
       background-color: #eee;
-      border-radius: 12px;
-      line-height: 160px;
+      border-radius: 10px;
+      line-height: 140px;
       cursor: pointer;
       user-select: none;
       transition: all 0.3s;
@@ -29,84 +29,78 @@
       background-color: gold;
       color: white;
     }
-    input {
+    input, button {
       padding: 10px;
       font-size: 16px;
-      width: 200px;
-    }
-    button {
-      padding: 10px 20px;
       margin-top: 10px;
-      font-size: 16px;
-      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <h2>🃏 กรอกเบอร์ก่อนเปิดไพ่ 1 ใบ</h2>
+  <h2>🃏 กรอกเบอร์เพื่อเปิดไพ่ 1 ใบ</h2>
 
-  <input type="text" id="phone" placeholder="กรอกเบอร์โทร" maxlength="10"><br>
-  <button onclick="enableCards()">เริ่มเปิดไพ่</button>
+  <input type="text" id="phone" placeholder="กรอกเบอร์โทรศัพท์" maxlength="10" />
+  <br/>
+  <button onclick="startGame()">เริ่มเกม</button>
 
-  <div id="cards" style="margin-top: 30px;">
-    <!-- ใส่ไพ่แบบปิด 10 ใบ -->
-    <div class="card" onclick="flipCard(this, 1)">?</div>
-    <div class="card" onclick="flipCard(this, 2)">?</div>
-    <div class="card" onclick="flipCard(this, 3)">?</div>
-    <div class="card" onclick="flipCard(this, 4)">?</div>
-    <div class="card" onclick="flipCard(this, 5)">?</div>
-    <div class="card" onclick="flipCard(this, 6)">?</div>
-    <div class="card" onclick="flipCard(this, 7)">?</div>
-    <div class="card" onclick="flipCard(this, 8)">?</div>
-    <div class="card" onclick="flipCard(this, 9)">?</div>
-    <div class="card" onclick="flipCard(this, 10)">?</div>
-  </div>
+  <div id="cards" style="margin-top: 20px;"></div>
 
   <p id="resultText"></p>
 
   <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwdtb6sSO36JiJXxQcOKNkjPlBM41JjOeVGppLPgAgkAy-Cv_L4FNx2e25266rDPVSXLQ/exec';
+    const scriptURL = 'https://script.google.com/macros/s/PASTE_YOUR_SCRIPT_URL_HERE/exec';
     let phoneValidated = false;
     let hasFlipped = false;
 
-    function enableCards() {
+    function startGame() {
       const phone = document.getElementById("phone").value;
       if (!phone || phone.length !== 10 || !/^0[0-9]{9}$/.test(phone)) {
-        alert("กรุณาใส่เบอร์ให้ถูกต้อง");
+        alert("กรุณาใส่เบอร์โทรให้ถูกต้อง");
         return;
       }
       phoneValidated = true;
-      alert("คลิกไพ่ 1 ใบเพื่อเปิด!");
+      hasFlipped = false;
+      document.getElementById("cards").innerHTML = "";
+
+      const numbers = shuffleArray([1,2,3,4,5,6,7,8,9,10]);
+      numbers.forEach((num, index) => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.textContent = "?";
+        card.onclick = function() {
+          flipCard(card, num);
+        };
+        document.getElementById("cards").appendChild(card);
+      });
+
+      document.getElementById("resultText").textContent = "";
     }
 
     function flipCard(el, number) {
-      if (!phoneValidated) {
-        alert("กรุณาใส่เบอร์ก่อนเปิดไพ่");
-        return;
-      }
-      if (hasFlipped) {
-        alert("เปิดได้แค่ 1 ครั้งเท่านั้น");
-        return;
-      }
+      if (!phoneValidated || hasFlipped) return;
 
-      el.innerText = number;
+      el.textContent = number;
       el.classList.add("opened");
       hasFlipped = true;
 
       const phone = document.getElementById("phone").value;
-      document.getElementById("resultText").innerText = `เบอร์ ${phone} เปิดได้เลข ${number}`;
+      document.getElementById("resultText").textContent = `เบอร์ ${phone} ได้เลข ${number}`;
 
       // ส่งเข้า Google Sheet
-     fetch(scriptURL, {
-  method: 'POST',
-  mode: 'no-cors', // <<== เพิ่มตรงนี้
-  body: JSON.stringify({ phone: phone, reward: number }),
-  headers: {
-    'Content-Type': 'application/json'
-  }
-})
-.then(() => console.log("✅ ส่งสำเร็จ"))
-.catch(err => console.error("❌ เกิดข้อผิดพลาด:", err));
+      fetch(scriptURL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify({ phone: phone, reward: number }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
     }
   </script>
 </body>
