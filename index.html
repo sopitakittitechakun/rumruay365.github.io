@@ -1,24 +1,23 @@
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>เปิดไพ่ลุ้นเลข</title>
+  <title>เปิดไพ่ลุ้นโชค | ร่ำรวย365</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600&display=swap');
-
     body {
       font-family: 'Sarabun', sans-serif;
-      background: linear-gradient(145deg, #fdfcfb, #e2d1c3);
+      background: url('https://cdn.pixabay.com/photo/2020/12/25/13/54/chinese-5859616_1280.jpg') center center / cover no-repeat;
       color: #2f2f2f;
+      text-align: center;
       padding: 40px;
     }
 
     h2 {
-      font-weight: 600;
       font-size: 26px;
       color: #5a3825;
+      margin-bottom: 20px;
     }
 
     input {
@@ -49,9 +48,9 @@
     }
 
     .card {
-      background: #f3f0eb;
+      position: relative;
+      background: #eee;
       border: 1px solid #d4c2b0;
-      color: #5a3825;
       width: 100px;
       height: 140px;
       border-radius: 14px;
@@ -59,54 +58,19 @@
       display: inline-block;
       line-height: 140px;
       font-size: 48px;
+      color: #5a3825;
+      cursor: pointer;
+      user-select: none;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      transition: all 0.3s ease;
+      transform-style: preserve-3d;
+      transition: transform 0.6s, background 0.3s;
     }
 
     .card.opened {
       background: #d8af7e;
       color: white;
       font-weight: bold;
-    }
-
-    body {
-      font-family: 'Prompt', sans-serif;
-      background: #fff8f0;
-      text-align: center;
-      padding: 30px;
-    }
-    .card {
-      display: inline-block;
-      width: 100px;
-      height: 140px;
-      margin: 10px;
-      font-size: 48px;
-      background-color: #eee;
-      border-radius: 10px;
-      line-height: 140px;
-      cursor: pointer;
-      user-select: none;
-      transition: all 0.3s;
-    }
-    .card.opened {
-      background-color: gold;
-      color: white;
-    }
-    input, button {
-      padding: 10px;
-      font-size: 16px;
-      margin-top: 10px;
-    }
-  
-    .card {
-      transform-style: preserve-3d;
-      transition: transform 0.6s;
-    }
-
-    .card.opened {
       transform: rotateY(180deg);
-      background: #d8af7e;
-      color: white;
     }
 
     .card::after {
@@ -118,15 +82,15 @@
       background-size: cover;
       opacity: 0.15;
       border-radius: 14px;
+      pointer-events: none;
     }
 
     audio {
       display: none;
     }
-</style>
-
+  </style>
 </head>
-<body style="background: url('https://cdn.pixabay.com/photo/2020/12/25/13/54/chinese-5859616_1280.jpg') center center / cover no-repeat;">
+<body>
   <img src="https://img2.pic.in.th/pic/f2387625-6279-4a4b-894b-3cdfbf8c2a5e.jpg" alt="ร่ำรวย365" style="width: 250px; margin-bottom: 20px;" />
 
   <h2>🃏 กรอกเบอร์เพื่อเปิดไพ่ 1 ใบ</h2>
@@ -136,10 +100,12 @@
 
   <div id="cards" style="margin-top: 20px;"></div>
 
+  <audio id="flipSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_72b2a6d7f8.mp3?filename=correct-choice-43861.mp3" preload="auto"></audio>
+
   <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwdtb6sSO36JiJXxQcOKNkjPlBM41JjOeVGppLPgAgkAy-Cv_L4FNx2e25266rDPVSXLQ/exec';
     let hasFlipped = false;
-    let playedNumbers = []; // จำเบอร์ที่เคยเล่นไว้
+    let playedNumbers = [];
 
     function startGame() {
       const phone = document.getElementById("phone").value;
@@ -174,7 +140,7 @@
       hasFlipped = true;
       playedNumbers.push(phone);
 
-      alert(`🎉 เบอร์ ${phone} ได้เลข ${number} 🎉`);
+      alert(`\uD83C\uDF89 เบอร์ ${phone} ได้เลข ${number} \uD83C\uDF89`);
 
       fetch(scriptURL, {
         method: 'POST',
@@ -183,7 +149,7 @@
         headers: {
           'Content-Type': 'application/json'
         }
-      });
+      }).catch(() => alert("เกิดข้อผิดพลาดในการส่งข้อมูล"));
     }
 
     function shuffleArray(array) {
@@ -194,8 +160,5 @@
       return array;
     }
   </script>
-
-<audio id="flipSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_72b2a6d7f8.mp3?filename=correct-choice-43861.mp3" preload="auto"></audio>
 </body>
-
 </html>
