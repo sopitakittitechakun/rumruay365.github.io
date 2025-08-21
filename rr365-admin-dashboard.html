@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>RR365 • Admin Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{ --bg:#0b0e16; --card:#141b2c; --primary:#ffd700; --text:#e9f0ff; --muted:#9db0da; }
+*{ box-sizing:border-box }
+body{ margin:0; background:var(--bg); color:var(--text); font-family:'Sarabun',sans-serif; }
+.wrap{ max-width:1150px; margin:26px auto; padding:0 16px; }
+h1{ margin:0 0 16px; color:var(--primary); font-size:26px; }
+.grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.card{ background:var(--card); border:1px solid rgba(255,215,0,.16); border-radius:14px; padding:14px; box-shadow:0 8px 28px rgba(0,0,0,.35); }
+.kpi{ font-size:13px; color:var(--muted); }
+.kpi b{ display:block; font-size:30px; color:var(--primary); margin-top:6px; }
+.row{ display:flex; gap:12px; margin-top:12px; }
+.row .card{ flex:1; }
+input,button{ padding:10px 12px; border-radius:10px; border:1px solid rgba(255,215,0,.25); background:#0f1627; color:var(--text); }
+input::placeholder{ color:#7e93be }
+button{ background:linear-gradient(90deg,#ffd700,#ff9900); color:#2b1600; border:none; cursor:pointer; font-weight:700; }
+table{ width:100%; border-collapse:collapse; font-size:13px; }
+th,td{ padding:8px 10px; border-bottom:1px dashed rgba(255,215,0,.15); text-align:left; }
+.tag{ background:#22c55e; color:#0b2a0f; font-weight:700; padding:2px 8px; border-radius:999px; font-size:12px; }
+.topbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.muted{ color:var(--muted); font-size:13px }
+/* Login */
+.login{ max-width:520px; margin:10vh auto; padding:20px; background:var(--card); border:1px solid rgba(255,215,0,.18); border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,.45);}
+.login h2{ margin:0 0 10px; color:var(--primary) }
+.login .g{ display:grid; gap:10px; }
+.login small{ color:var(--muted) }
+.right{ text-align:right }
+.split{ display:flex; gap:8px }
+@media (max-width:900px){ .grid{grid-template-columns:1fr} .row{flex-direction:column} }
+</style>
+</head>
+<body>
+
+
+<!-- LOGIN VIEW -->
+<div id="loginView" class="login" style="display:none;">
+<h2>เข้าสู่ระบบ • RR365 Admin</h2>
+<div class="g">
+<label>API Base URL (Web App ของ Apps Script)
+<input id="apiBase" placeholder="เช่น https://script.google.com/macros/s/xxx/exec">
+</label>
+<label>Admin Token
+<input id="adminToken" placeholder="วาง ADMIN_TOKEN ที่ตั้งไว้ใน Script Properties">
+</label>
+<label class="split">
+<span><input type="checkbox" id="remember"> จำค่าไว้ในเครื่องนี้</span>
+<span class="muted" style="margin-left:auto;">* โทเคนจะเก็บใน session/localStorage</span>
+</label>
+<div class="right">
+<button id="btnLogin">เข้าสู่ระบบ</button>
+</div>
+</div>
+<small>เคล็ดลับ: เก็บ API/Token ใน <b>localStorage</b> เฉพาะคอมส่วนตัวเท่านั้น</small>
+</div>
+
+
+<!-- APP VIEW -->
+<div id="appView" style="display:none;">
+<div class="wrap">
+<div class="topbar">
+<h1>RR365 • Admin Dashboard</h1>
+<div>
+</html>
